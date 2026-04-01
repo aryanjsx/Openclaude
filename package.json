@@ -1,10 +1,10 @@
 {
   "name": "@aryanjsx/openclaude",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "Claude Code opened to any LLM — OpenAI, Gemini, DeepSeek, Ollama, and 200+ models",
   "type": "module",
   "bin": {
-    "openclaude": "./bin/openclaude"
+    "openclaude": "./bin/openclaude.js"
   },
   "files": [
     "bin/",
@@ -117,7 +117,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://aryanjsx.com/z6MkqDnb7Siv3Cwj7pGJq4T5EsUisECqR8KpnDLwcaZq5TPr/openclaude"
+    "url": "git+https://github.com/aryanjsx/Openclaude.git"
+  },
+  "homepage": "https://github.com/aryanjsx/Openclaude#readme",
+  "bugs": {
+    "url": "https://github.com/aryanjsx/Openclaude/issues"
   },
   "keywords": [
     "claude-code",

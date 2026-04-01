@@ -20,8 +20,8 @@ npm install -g @aryanjsx/openclaude
 
 ```bash
 # Clone from aryanjsx
-git clone https://node.aryanjsx.com/z6MkqDnb7Siv3Cwj7pGJq4T5EsUisECqR8KpnDLwcaZq5TPr/openclaude.git
-cd openclaude
+git clone https://github.com/aryanjsx/Openclaude.git
+cd Openclaude
 
 # Install dependencies
 bun install
@@ -36,8 +36,8 @@ npm link
 ### Option C: Run directly with Bun (no build step)
 
 ```bash
-git clone https://node.aryanjsx.com/z6MkqDnb7Siv3Cwj7pGJq4T5EsUisECqR8KpnDLwcaZq5TPr/openclaude.git
-cd openclaude
+git clone https://github.com/aryanjsx/Openclaude.git
+cd Openclaude
 bun install
 bun run dev
 ```
@@ -312,7 +312,7 @@ src/utils/auth.ts                — Recognizes OpenAI as valid 3P provider
 
 ## Origin
 
-This is a fork of [instructkr/claude-code](https://aryanjsx.com/node/repos/z6MkgKkb/instructkr-claude-code), which mirrored the Claude Code source snapshot that became publicly accessible through an npm source map exposure on March 31, 2026.
+This is a fork of [instructkr/claude-code](https://github.com/instructkr/claude-code), which mirrored the Claude Code source snapshot that became publicly accessible through an npm source map exposure on March 31, 2026.
 
 The original Claude Code source is the property of Anthropic. This repository is not affiliated with or endorsed by Anthropic.
 
