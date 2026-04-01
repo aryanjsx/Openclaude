@@ -1,39 +1,50 @@
-# OpenClaude
+<p align="center">
+  <strong><code>&gt;_ OpenClaude</code></strong>
+</p>
 
-Use Claude Code with **any LLM** — not just Claude.
+<p align="center">
+  Claude Code with <strong>any LLM</strong> — not just Claude.
+</p>
 
-OpenClaude is a fork of the **Claude Code source leak** (exposed via npm source maps on March 31, 2026). We added an OpenAI-compatible provider shim so you can plug in GPT-4o, DeepSeek, Gemini, Llama, Mistral, or any model that speaks the OpenAI chat completions API.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@aryanjsx/openclaude"><img src="https://img.shields.io/npm/v/@aryanjsx/openclaude?style=flat-square&color=7c3aed&label=npm" alt="npm"></a>
+  <a href="https://github.com/aryanjsx/Openclaude"><img src="https://img.shields.io/github/stars/aryanjsx/Openclaude?style=flat-square&color=7c3aed" alt="stars"></a>
+  <a href="https://github.com/aryanjsx/Openclaude/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-7c3aed?style=flat-square" alt="license"></a>
+  <a href="https://github.com/aryanjsx/Openclaude"><img src="https://img.shields.io/badge/node-%3E%3D20-7c3aed?style=flat-square" alt="node"></a>
+</p>
 
-All of Claude Code's tools work — bash, file read/write/edit, grep, glob, agents, tasks, MCP — just powered by whatever model you choose.
+<p align="center">
+  <a href="#install">Install</a> &bull;
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#providers">Providers</a> &bull;
+  <a href="#model-guide">Model Guide</a> &bull;
+  <a href="#how-it-works">How It Works</a>
+</p>
 
 ---
 
+Plug in **GPT-4o, DeepSeek, Gemini, Llama, Mistral, Ollama**, or any model that speaks the OpenAI chat completions API. All of Claude Code's tools work — bash, file read/write/edit, grep, glob, agents, tasks, MCP — powered by whatever model you choose.
+
+**200+ compatible models. 15 built-in tools. 786 lines of shim code. Zero extra dependencies.**
+
 ## Install
 
-### Option A: npm (recommended)
+**npm (recommended)**
 
 ```bash
 npm install -g @aryanjsx/openclaude
 ```
 
-### Option B: From source (requires Bun)
+**From source**
 
 ```bash
-# Clone from aryanjsx
 git clone https://github.com/aryanjsx/Openclaude.git
 cd Openclaude
-
-# Install dependencies
 bun install
-
-# Build
 bun run build
-
-# Link globally (optional)
-npm link
 ```
 
-### Option C: Run directly with Bun (no build step)
+**Run directly with Bun (no build step)**
 
 ```bash
 git clone https://github.com/aryanjsx/Openclaude.git
@@ -42,11 +53,9 @@ bun install
 bun run dev
 ```
 
----
-
 ## Quick Start
 
-### 1. Set 3 environment variables
+**1. Set your provider**
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -54,27 +63,21 @@ export OPENAI_API_KEY=sk-your-key-here
 export OPENAI_MODEL=gpt-4o
 ```
 
-### 2. Run it
+**2. Launch**
 
 ```bash
-# If installed via npm
 openclaude
-
-# If built from source
-bun run dev
-# or after build:
-node dist/cli.mjs
 ```
 
-That's it. The tool system, streaming, file editing, multi-step reasoning — everything works through the model you picked.
+That's it. Streaming, tool calling, file editing, multi-step reasoning — everything works through the model you pick. The npm package name is `@aryanjsx/openclaude`, but the CLI command is `openclaude`.
 
-The npm package name is `@aryanjsx/openclaude`, but the installed CLI command is still `openclaude`.
+## Providers
 
----
-
-## Provider Examples
-
-### OpenAI
+<table>
+<tr><th>Provider</th><th>Setup</th></tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -82,7 +85,11 @@ export OPENAI_API_KEY=sk-...
 export OPENAI_MODEL=gpt-4o
 ```
 
-### DeepSeek
+</td>
+</tr>
+<tr>
+<td><strong>DeepSeek</strong></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -91,7 +98,11 @@ export OPENAI_BASE_URL=https://api.deepseek.com/v1
 export OPENAI_MODEL=deepseek-chat
 ```
 
-### Google Gemini (via OpenRouter)
+</td>
+</tr>
+<tr>
+<td><strong>Gemini</strong><br><sub>via OpenRouter</sub></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -100,26 +111,24 @@ export OPENAI_BASE_URL=https://openrouter.ai/api/v1
 export OPENAI_MODEL=google/gemini-2.0-flash
 ```
 
-### Ollama (local, free)
+</td>
+</tr>
+<tr>
+<td><strong>Ollama</strong><br><sub>local, free</sub></td>
+<td>
 
 ```bash
 ollama pull llama3.3:70b
-
 export CLAUDE_CODE_USE_OPENAI=1
 export OPENAI_BASE_URL=http://localhost:11434/v1
 export OPENAI_MODEL=llama3.3:70b
-# no API key needed for local models
 ```
 
-### LM Studio (local)
-
-```bash
-export CLAUDE_CODE_USE_OPENAI=1
-export OPENAI_BASE_URL=http://localhost:1234/v1
-export OPENAI_MODEL=your-model-name
-```
-
-### Together AI
+</td>
+</tr>
+<tr>
+<td><strong>Together AI</strong></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -128,7 +137,11 @@ export OPENAI_BASE_URL=https://api.together.xyz/v1
 export OPENAI_MODEL=meta-llama/Llama-3.3-70B-Instruct-Turbo
 ```
 
-### Groq
+</td>
+</tr>
+<tr>
+<td><strong>Groq</strong></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -137,7 +150,11 @@ export OPENAI_BASE_URL=https://api.groq.com/openai/v1
 export OPENAI_MODEL=llama-3.3-70b-versatile
 ```
 
-### Mistral
+</td>
+</tr>
+<tr>
+<td><strong>Mistral</strong></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -146,7 +163,11 @@ export OPENAI_BASE_URL=https://api.mistral.ai/v1
 export OPENAI_MODEL=mistral-large-latest
 ```
 
-### Azure OpenAI
+</td>
+</tr>
+<tr>
+<td><strong>Azure OpenAI</strong></td>
+<td>
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -155,133 +176,57 @@ export OPENAI_BASE_URL=https://your-resource.openai.azure.com/openai/deployments
 export OPENAI_MODEL=gpt-4o
 ```
 
----
+</td>
+</tr>
+<tr>
+<td><strong>LM Studio</strong><br><sub>local</sub></td>
+<td>
+
+```bash
+export CLAUDE_CODE_USE_OPENAI=1
+export OPENAI_BASE_URL=http://localhost:1234/v1
+export OPENAI_MODEL=your-model-name
+```
+
+</td>
+</tr>
+</table>
+
+Any provider that exposes an OpenAI-compatible `/v1/chat/completions` endpoint will work.
 
 ## Environment Variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `CLAUDE_CODE_USE_OPENAI` | Yes | Set to `1` to enable the OpenAI provider |
-| `OPENAI_API_KEY` | Yes* | Your API key (*not needed for local models like Ollama) |
+| `OPENAI_API_KEY` | Yes\* | Your API key (\*not needed for local models) |
 | `OPENAI_MODEL` | Yes | Model name (e.g. `gpt-4o`, `deepseek-chat`, `llama3.3:70b`) |
 | `OPENAI_BASE_URL` | No | API endpoint (defaults to `https://api.openai.com/v1`) |
 
-You can also use `ANTHROPIC_MODEL` to override the model name. `OPENAI_MODEL` takes priority.
-
----
-
-## Runtime Hardening
-
-Use these commands to keep the CLI stable and catch environment mistakes early:
-
-```bash
-# quick startup sanity check
-bun run smoke
-
-# validate provider env + reachability
-bun run doctor:runtime
-
-# print machine-readable runtime diagnostics
-bun run doctor:runtime:json
-
-# persist a diagnostics report to reports/doctor-runtime.json
-bun run doctor:report
-
-# full local hardening check (typecheck + smoke + runtime doctor)
-bun run hardening:check
-
-# strict hardening (includes project-wide typecheck)
-bun run hardening:strict
-```
-
-Notes:
-- `doctor:runtime` fails fast if `CLAUDE_CODE_USE_OPENAI=1` with a placeholder key (`SUA_CHAVE`) or a missing key for non-local providers.
-- Local providers (for example `http://localhost:11434/v1`) can run without `OPENAI_API_KEY`.
-
-### Provider Launch Profiles
-
-Use profile launchers to avoid repeated environment setup:
-
-```bash
-# one-time profile bootstrap (auto-detect ollama, otherwise openai)
-bun run profile:init
-
-# openai bootstrap with explicit key
-bun run profile:init -- --provider openai --api-key sk-...
-
-# ollama bootstrap with custom model
-bun run profile:init -- --provider ollama --model llama3.1:8b
-
-# launch using persisted profile (.openclaude-profile.json)
-bun run dev:profile
-
-# OpenAI profile (requires OPENAI_API_KEY in your shell)
-bun run dev:openai
-
-# Ollama profile (defaults: localhost:11434, llama3.1:8b)
-bun run dev:ollama
-```
-
-`dev:openai` and `dev:ollama` run `doctor:runtime` first and only launch the app if checks pass.
-For `dev:ollama`, make sure Ollama is running locally before launch.
-
----
+`ANTHROPIC_MODEL` can also override the model name. `OPENAI_MODEL` takes priority.
 
 ## What Works
 
-- **All tools**: Bash, FileRead, FileWrite, FileEdit, Glob, Grep, WebFetch, WebSearch, Agent, MCP, LSP, NotebookEdit, Tasks
-- **Streaming**: Real-time token streaming
-- **Tool calling**: Multi-step tool chains (the model calls tools, gets results, continues)
-- **Images**: Base64 and URL images passed to vision models
-- **Slash commands**: /commit, /review, /compact, /diff, /doctor, etc.
-- **Sub-agents**: AgentTool spawns sub-agents using the same provider
-- **Memory**: Persistent memory system
+| Feature | Status |
+|---------|--------|
+| All 15 tools (Bash, FileRead, FileWrite, FileEdit, Glob, Grep, WebFetch, WebSearch, Agent, MCP, LSP, NotebookEdit, Tasks) | Fully working |
+| Real-time token streaming | Fully working |
+| Multi-step tool chains | Fully working |
+| Vision (base64 & URL images) | Fully working |
+| Slash commands (/commit, /review, /compact, /diff, /doctor) | Fully working |
+| Sub-agents (AgentTool) | Fully working |
+| Persistent memory | Fully working |
 
-## What's Different
+**What's different from the original:**
 
-- **No thinking mode**: Anthropic's extended thinking is disabled (OpenAI models use different reasoning)
-- **No prompt caching**: Anthropic-specific cache headers are skipped
-- **No beta features**: Anthropic-specific beta headers are ignored
-- **Token limits**: Defaults to 32K max output — some models may cap lower, which is handled gracefully
+- No extended thinking mode (OpenAI models use different reasoning approaches)
+- No Anthropic prompt caching or beta headers
+- 32K default max output tokens (handled gracefully if a model caps lower)
 
----
-
-## How It Works
-
-The shim (`src/services/api/openaiShim.ts`) sits between Claude Code and the LLM API:
-
-```
-Claude Code Tool System
-        |
-        v
-  Anthropic SDK interface (duck-typed)
-        |
-        v
-  openaiShim.ts  <-- translates formats
-        |
-        v
-  OpenAI Chat Completions API
-        |
-        v
-  Any compatible model
-```
-
-It translates:
-- Anthropic message blocks → OpenAI messages
-- Anthropic tool_use/tool_result → OpenAI function calls
-- OpenAI SSE streaming → Anthropic stream events
-- Anthropic system prompt arrays → OpenAI system messages
-
-The rest of Claude Code doesn't know it's talking to a different model.
-
----
-
-## Model Quality Notes
-
-Not all models are equal at agentic tool use. Here's a rough guide:
+## Model Guide
 
 | Model | Tool Calling | Code Quality | Speed |
-|-------|-------------|-------------|-------|
+|-------|:---:|:---:|:---:|
 | GPT-4o | Excellent | Excellent | Fast |
 | DeepSeek-V3 | Great | Great | Fast |
 | Gemini 2.0 Flash | Great | Good | Very Fast |
@@ -293,12 +238,35 @@ Not all models are equal at agentic tool use. Here's a rough guide:
 
 For best results, use models with strong function/tool calling support.
 
----
+## How It Works
 
-## Files Changed from Original
+The shim (`src/services/api/openaiShim.ts`) is a thin translation layer between Claude Code's Anthropic SDK interface and any OpenAI-compatible API:
 
 ```
-src/services/api/openaiShim.ts   — NEW: OpenAI-compatible API shim (724 lines)
+Claude Code Tool System
+        |
+  Anthropic SDK interface (duck-typed)
+        |
+  openaiShim.ts  ← translates formats
+        |
+  OpenAI Chat Completions API
+        |
+  Any compatible model
+```
+
+**What it translates:**
+
+- Anthropic message blocks &rarr; OpenAI messages
+- Anthropic `tool_use` / `tool_result` &rarr; OpenAI function calls
+- OpenAI SSE streaming &rarr; Anthropic stream events
+- Anthropic system prompt arrays &rarr; OpenAI system messages
+
+Claude Code doesn't know it's talking to a different model.
+
+## Files Changed
+
+```
+src/services/api/openaiShim.ts   — OpenAI-compatible API shim (724 lines)
 src/services/api/client.ts       — Routes to shim when CLAUDE_CODE_USE_OPENAI=1
 src/utils/model/providers.ts     — Added 'openai' provider type
 src/utils/model/configs.ts       — Added openai model mappings
@@ -308,16 +276,29 @@ src/utils/auth.ts                — Recognizes OpenAI as valid 3P provider
 
 6 files changed. 786 lines added. Zero dependencies added.
 
----
+## Runtime Hardening
+
+```bash
+bun run smoke              # startup sanity check
+bun run doctor:runtime     # validate provider env + reachability
+bun run hardening:check    # typecheck + smoke + runtime doctor
+bun run hardening:strict   # full strict check
+```
+
+**Provider launch profiles** save repeated env setup:
+
+```bash
+bun run profile:init                                     # auto-detect provider
+bun run profile:init -- --provider openai --api-key sk-... # explicit setup
+bun run dev:profile                                      # launch from saved profile
+bun run dev:openai                                       # OpenAI shortcut
+bun run dev:ollama                                       # Ollama shortcut
+```
 
 ## Origin
 
-This is a fork of [instructkr/claude-code](https://github.com/instructkr/claude-code), which mirrored the Claude Code source snapshot that became publicly accessible through an npm source map exposure on March 31, 2026.
-
-The original Claude Code source is the property of Anthropic. This repository is not affiliated with or endorsed by Anthropic.
-
----
+Fork of [instructkr/claude-code](https://github.com/instructkr/claude-code), which mirrored the Claude Code source snapshot that became publicly accessible through an npm source map exposure on March 31, 2026. Not affiliated with or endorsed by Anthropic.
 
 ## License
 
-This repository is provided for educational and research purposes. The original source code is subject to Anthropic's terms. The OpenAI shim additions are public domain.
+MIT. The original Claude Code source is subject to Anthropic's terms. The OpenAI shim additions are public domain.

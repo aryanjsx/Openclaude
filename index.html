@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaude — Claude Code with Any LLM</title>
+  <meta name="description" content="Use Claude Code with any LLM — OpenAI, Gemini, DeepSeek, Ollama, and 200+ models. All tools work. Zero lock-in.">
+  <meta property="og:title" content="OpenClaude — Claude Code with Any LLM">
+  <meta property="og:description" content="Use Claude Code with any LLM — OpenAI, Gemini, DeepSeek, Ollama, and 200+ models.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-card-hover: #1a1a26;
+      --bg-terminal: #0d0d14;
+      --border: #1e1e2e;
+      --border-glow: #6c5ce7;
+      --text: #e2e2ea;
+      --text-muted: #8888a0;
+      --text-dim: #55556a;
+      --accent: #a78bfa;
+      --accent-bright: #c4b5fd;
+      --accent-dim: #7c3aed;
+      --green: #4ade80;
+      --blue: #60a5fa;
+      --orange: #fb923c;
+      --pink: #f472b6;
+      --cyan: #22d3ee;
+      --yellow: #facc15;
+      --radius: 12px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--accent-bright); }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand {
+      font-size: 1.2rem; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+      background: var(--accent-dim); color: #fff; border: none; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover { background: #6d28d9; color: #fff; }
+    .nav-btn svg { width: 18px; height: 18px; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 160px 0 100px; text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 100px;
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      font-size: 0.8rem; font-weight: 500; color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.2rem);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent-bright), var(--cyan), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.15rem; color: var(--text-muted);
+      max-width: 580px; margin: 0 auto 40px;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 10px;
+      font-size: 0.95rem; font-weight: 600;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: var(--accent-dim); color: #fff;
+    }
+    .btn-primary:hover { background: #6d28d9; color: #fff; transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--bg-card); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent-dim); color: var(--text); transform: translateY(-1px); }
+
+    /* ── TERMINAL ── */
+    .terminal-wrapper {
+      max-width: 620px; margin: 60px auto 0;
+      position: relative;
+    }
+    .terminal {
+      background: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      text-align: left;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .terminal-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+    }
+    .terminal-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+    .terminal-title {
+      flex: 1; text-align: center;
+      font-size: 0.75rem; color: var(--text-dim); font-family: var(--mono);
+    }
+    .terminal-body {
+      padding: 20px; font-family: var(--mono); font-size: 0.85rem;
+      line-height: 1.8; min-height: 180px;
+    }
+    .terminal-body .prompt { color: var(--green); }
+    .terminal-body .cmd { color: var(--text); }
+    .terminal-body .output { color: var(--text-muted); }
+    .terminal-body .success { color: var(--cyan); }
+    .terminal-body .cursor-blink {
+      display: inline-block; width: 8px; height: 16px;
+      background: var(--accent); vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex; justify-content: center; gap: 60px;
+      padding: 60px 0; flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-value {
+      font-size: 2rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-bright), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 0; }
+    .section-label {
+      font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .section-sub {
+      color: var(--text-muted); font-size: 1.05rem; max-width: 520px;
+      margin-bottom: 50px;
+    }
+    .section-center { text-align: center; }
+    .section-center .section-sub { margin-left: auto; margin-right: auto; }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .feature-card:hover {
+      border-color: rgba(167, 139, 250, 0.3);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 16px;
+      background: rgba(167, 139, 250, 0.1);
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── PROVIDERS ── */
+    .providers-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    .provider-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .provider-card:hover {
+      border-color: rgba(167, 139, 250, 0.3);
+      transform: translateY(-2px);
+    }
+    .provider-card .provider-icon {
+      font-size: 2rem; margin-bottom: 12px; display: block;
+    }
+    .provider-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+    .provider-card p { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── HOW IT WORKS ── */
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px; counter-reset: step;
+    }
+    .step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+      counter-increment: step;
+    }
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      font-size: 3rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-dim), transparent);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1; margin-bottom: 16px; display: block;
+    }
+    .step h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .step p { font-size: 0.88rem; color: var(--text-muted); }
+    .step code {
+      display: block; margin-top: 12px; padding: 10px 14px;
+      background: var(--bg-terminal); border-radius: 8px;
+      font-family: var(--mono); font-size: 0.8rem; color: var(--green);
+      border: 1px solid var(--border); word-break: break-all;
+    }
+
+    /* ── MODEL TABLE ── */
+    .model-table-wrapper {
+      overflow-x: auto; margin-top: 10px;
+      border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .model-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .model-table th {
+      text-align: left; padding: 14px 20px;
+      background: var(--bg-card);
+      color: var(--text-muted); font-weight: 600; font-size: 0.8rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+    .model-table td {
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+    }
+    .model-table tr:last-child td { border-bottom: none; }
+    .model-table tr:hover td { background: rgba(167, 139, 250, 0.03); }
+    .model-table .model-name { font-weight: 600; }
+    .badge {
+      display: inline-block; padding: 2px 10px; border-radius: 100px;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .badge-excellent { background: rgba(74, 222, 128, 0.12); color: var(--green); }
+    .badge-great { background: rgba(96, 165, 250, 0.12); color: var(--blue); }
+    .badge-good { background: rgba(251, 146, 60, 0.12); color: var(--orange); }
+    .badge-limited { background: rgba(136, 136, 160, 0.12); color: var(--text-muted); }
+    .badge-fast { background: rgba(34, 211, 238, 0.12); color: var(--cyan); }
+    .badge-medium { background: rgba(250, 204, 21, 0.12); color: var(--yellow); }
+
+    /* ── ARCHITECTURE ── */
+    .arch-flow {
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+      margin-top: 20px;
+    }
+    .arch-block {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 32px;
+      font-family: var(--mono); font-size: 0.85rem;
+      font-weight: 500; text-align: center; min-width: 280px;
+    }
+    .arch-block.highlight {
+      border-color: var(--accent-dim);
+      background: rgba(124, 58, 237, 0.08);
+      color: var(--accent-bright);
+    }
+    .arch-arrow {
+      color: var(--text-dim); font-size: 1.4rem; line-height: 1;
+      padding: 4px 0;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center; padding: 100px 0;
+    }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(34, 211, 238, 0.05));
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      border-radius: 20px; padding: 60px 40px;
+    }
+    .cta-box h2 {
+      font-size: 2rem; font-weight: 700; margin-bottom: 12px;
+    }
+    .cta-box p {
+      color: var(--text-muted); font-size: 1.05rem; margin-bottom: 30px;
+    }
+    .cta-install {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--bg-terminal); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 24px;
+      font-family: var(--mono); font-size: 0.9rem;
+      color: var(--text); cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .cta-install:hover { border-color: var(--accent-dim); }
+    .cta-install .dollar { color: var(--green); }
+    .cta-install .copy-hint { color: var(--text-dim); font-size: 0.75rem; margin-left: 12px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0; text-align: center;
+    }
+    footer p { color: var(--text-dim); font-size: 0.85rem; }
+    footer a { color: var(--text-muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats { gap: 30px; }
+      .hero { padding: 130px 0 60px; }
+      .providers-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .providers-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#" class="nav-brand"><span>&gt;_</span> OpenClaude</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#providers">Providers</a>
+      <a href="#quickstart">Quick Start</a>
+      <a href="#models">Models</a>
+      <a href="https://github.com/aryanjsx/Openclaude" class="nav-btn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Open Source &middot; MIT License &middot; v0.1.5
+    </div>
+    <h1>Claude Code with<br><span class="gradient">any LLM you want.</span></h1>
+    <p>Plug in GPT-4o, DeepSeek, Gemini, Llama, Mistral, Ollama, or any OpenAI-compatible model. All tools work. Zero lock-in.</p>
+    <div class="hero-actions">
+      <a href="#quickstart" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/aryanjsx/Openclaude" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+
+    <div class="terminal-wrapper">
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">~</span> <span class="cmd">npm install -g @aryanjsx/openclaude</span></div>
+          <div class="output">added 70 packages in 4s</div>
+          <br>
+          <div><span class="prompt">~</span> <span class="cmd">export CLAUDE_CODE_USE_OPENAI=1</span></div>
+          <div><span class="prompt">~</span> <span class="cmd">export OPENAI_MODEL=gpt-4o</span></div>
+          <br>
+          <div><span class="prompt">~</span> <span class="cmd">openclaude</span></div>
+          <div class="success">OpenClaude v0.1.5 &middot; model: gpt-4o &middot; ready</div>
+          <div><span class="prompt">&gt;</span> <span class="cursor-blink"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="container">
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">200+</div>
+      <div class="stat-label">Compatible Models</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">15</div>
+      <div class="stat-label">Built-in Tools</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">786</div>
+      <div class="stat-label">Lines of Shim Code</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">0</div>
+      <div class="stat-label">Extra Dependencies</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container section-center">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything Claude Code does, with any model</h2>
+    <p class="section-sub">The full tool system, streaming, multi-step reasoning &mdash; all working through the model you choose.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&gt;_</div>
+        <h3>All 15 Tools</h3>
+        <p>Bash, FileRead, FileWrite, FileEdit, Glob, Grep, WebFetch, WebSearch, Agent, MCP, LSP, NotebookEdit, Tasks, and more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(34,211,238,0.1);">&#9889;</div>
+        <h3>Real-Time Streaming</h3>
+        <p>Token-by-token streaming output, just like the original. Watch your model think and act in real time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(74,222,128,0.1);">&#128279;</div>
+        <h3>Multi-Step Tool Chains</h3>
+        <p>The model calls tools, gets results, reasons, and continues. Complex agentic workflows work out of the box.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(251,146,60,0.1);">&#128065;</div>
+        <h3>Vision Support</h3>
+        <p>Pass images as base64 or URL to vision-capable models. Screenshots, diagrams, UI mockups &mdash; all supported.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(244,114,182,0.1);">&#47;</div>
+        <h3>Slash Commands</h3>
+        <p>/commit, /review, /compact, /diff, /doctor &mdash; all the commands you know from Claude Code still work.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(250,204,21,0.1);">&#129504;</div>
+        <h3>Sub-Agents &amp; Memory</h3>
+        <p>AgentTool spawns sub-agents using your provider. Persistent memory system keeps context across sessions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROVIDERS -->
+<section id="providers" style="background: linear-gradient(180deg, transparent, rgba(124,58,237,0.03), transparent);">
+  <div class="container section-center">
+    <div class="section-label">Providers</div>
+    <h2 class="section-title">Works with every major provider</h2>
+    <p class="section-sub">Any model that speaks the OpenAI chat completions API. Cloud or local.</p>
+
+    <div class="providers-grid">
+      <div class="provider-card">
+        <span class="provider-icon">&#9679;</span>
+        <h3>OpenAI</h3>
+        <p>GPT-4o, GPT-4o-mini</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#9830;</span>
+        <h3>DeepSeek</h3>
+        <p>V3, R1</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#10022;</span>
+        <h3>Gemini</h3>
+        <p>via OpenRouter</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#127984;</span>
+        <h3>Ollama</h3>
+        <p>Local, free</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#9670;</span>
+        <h3>Mistral</h3>
+        <p>Large, Medium</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#9733;</span>
+        <h3>Together AI</h3>
+        <p>Llama, Qwen</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#9889;</span>
+        <h3>Groq</h3>
+        <p>Ultra-fast inference</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#9729;</span>
+        <h3>Azure OpenAI</h3>
+        <p>Enterprise</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#9881;</span>
+        <h3>LM Studio</h3>
+        <p>Local GUI</p>
+      </div>
+      <div class="provider-card">
+        <span class="provider-icon">&#8734;</span>
+        <h3>Any Compatible</h3>
+        <p>OpenAI API format</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK START -->
+<section id="quickstart">
+  <div class="container section-center">
+    <div class="section-label">Quick Start</div>
+    <h2 class="section-title">Up and running in 60 seconds</h2>
+    <p class="section-sub">Three steps. One command. Any model.</p>
+
+    <div class="steps">
+      <div class="step">
+        <h3>Install</h3>
+        <p>One command to install globally via npm.</p>
+        <code>npm install -g @aryanjsx/openclaude</code>
+      </div>
+      <div class="step">
+        <h3>Configure</h3>
+        <p>Set your provider and model with environment variables.</p>
+        <code>export CLAUDE_CODE_USE_OPENAI=1<br>export OPENAI_API_KEY=sk-...<br>export OPENAI_MODEL=gpt-4o</code>
+      </div>
+      <div class="step">
+        <h3>Run</h3>
+        <p>Launch OpenClaude. That's it. Everything works.</p>
+        <code>openclaude</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section style="background: linear-gradient(180deg, transparent, rgba(34,211,238,0.02), transparent);">
+  <div class="container section-center">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">How the shim works</h2>
+    <p class="section-sub">A thin translation layer. Claude Code doesn't know it's talking to a different model.</p>
+
+    <div class="arch-flow">
+      <div class="arch-block">Claude Code Tool System</div>
+      <div class="arch-arrow">&darr;</div>
+      <div class="arch-block">Anthropic SDK Interface (duck-typed)</div>
+      <div class="arch-arrow">&darr;</div>
+      <div class="arch-block highlight">openaiShim.ts &mdash; translates formats</div>
+      <div class="arch-arrow">&darr;</div>
+      <div class="arch-block">OpenAI Chat Completions API</div>
+      <div class="arch-arrow">&darr;</div>
+      <div class="arch-block">Any Compatible Model</div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS TABLE -->
+<section id="models">
+  <div class="container section-center">
+    <div class="section-label">Model Quality</div>
+    <h2 class="section-title">Not all models are equal</h2>
+    <p class="section-sub">A rough guide to what works best for agentic tool use.</p>
+
+    <div class="model-table-wrapper">
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Tool Calling</th>
+            <th>Code Quality</th>
+            <th>Speed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="model-name">GPT-4o</td>
+            <td><span class="badge badge-excellent">Excellent</span></td>
+            <td><span class="badge badge-excellent">Excellent</span></td>
+            <td><span class="badge badge-fast">Fast</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">DeepSeek-V3</td>
+            <td><span class="badge badge-great">Great</span></td>
+            <td><span class="badge badge-great">Great</span></td>
+            <td><span class="badge badge-fast">Fast</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">Gemini 2.0 Flash</td>
+            <td><span class="badge badge-great">Great</span></td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-fast">Very Fast</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">Llama 3.3 70B</td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-medium">Medium</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">Mistral Large</td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-fast">Fast</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">GPT-4o-mini</td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-fast">Very Fast</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">Qwen 2.5 72B</td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-good">Good</span></td>
+            <td><span class="badge badge-medium">Medium</span></td>
+          </tr>
+          <tr>
+            <td class="model-name">Smaller (&lt;7B)</td>
+            <td><span class="badge badge-limited">Limited</span></td>
+            <td><span class="badge badge-limited">Limited</span></td>
+            <td><span class="badge badge-fast">Very Fast</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <h2>Ready to try it?</h2>
+      <p>Install in one command. Use any model. Ship faster.</p>
+      <div class="cta-install" onclick="navigator.clipboard.writeText('npm install -g @aryanjsx/openclaude');this.querySelector('.copy-hint').textContent='Copied!'">
+        <span class="dollar">$</span> npm install -g @aryanjsx/openclaude
+        <span class="copy-hint">click to copy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p style="margin-bottom: 8px;">
+      <a href="https://github.com/aryanjsx/Openclaude" target="_blank" rel="noopener">GitHub</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://www.npmjs.com/package/@aryanjsx/openclaude" target="_blank" rel="noopener">npm</a>
+      &nbsp;&middot;&nbsp;
+      MIT License
+    </p>
+    <p>Built by <a href="https://github.com/aryanjsx" target="_blank" rel="noopener">Aryan Kumar</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
